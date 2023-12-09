@@ -1,7 +1,8 @@
 import { EError } from "../enums/EError.js";
+import { logger } from "../helpers/loggerConfig.js";
 
 export const errorHandler = (error, req, res, next) => {
-    console.log(error.code);
+    logger.info(error.code);
     switch (error.code) {
         case EError.MONGOOSE_CONNECT_ERROR:
             res.json({ status: "Error", error: error.cause });

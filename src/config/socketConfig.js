@@ -1,17 +1,20 @@
 import http from 'http';
 import { Server } from 'socket.io';
+import { logger } from '../helpers/loggerConfig.js';
 
 const configureSocket = (app) => {
     const server = http.createServer(app);
     const io = new Server(server);
 
     io.on('connection', (socket) => {
-        console.log('Usuario conectado');
+        logger.info('Usuario conectado');
+
         socket.on('newMessage', (message) => {
             io.emit('newMessage', message);
         });
+
         socket.on('disconnect', () => {
-            console.log('Usuario desconectado');
+            logger.info('Usuario desconectado');
         });
     });
 
@@ -19,4 +22,3 @@ const configureSocket = (app) => {
 };
 
 export default configureSocket;
-

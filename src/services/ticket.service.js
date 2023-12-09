@@ -1,6 +1,7 @@
 // ticket.service.js
 import Ticket from "../dao/models/ticketModel.js";
 import { ticketErrors } from './errors/ticketErrors.js';
+import { logger } from "../helpers/loggerConfig.js";
 
 const TicketService = {
     generateTicketCode: () => {
@@ -18,7 +19,7 @@ const TicketService = {
             });
             await newTicket.save();
         } catch (error) {
-            console.error('Error al crear el ticket:', error);
+            logger.error('Error al crear el ticket:', error);
             ticketErrors.ticketCreationError(error);
         }
     },

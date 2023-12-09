@@ -21,6 +21,7 @@ import { __dirname, __filename, } from "./utils.js";
 import { connectDB } from "./config/databaseConfig.js";
 import { engine } from "express-handlebars";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { logger } from "./helpers/loggerConfig.js";
 
 // Express & Socket
 
@@ -71,6 +72,6 @@ app.use(errorHandler);
 // Arranque Del Server
 
 server.listen(port, () => {
-    console.log(`Servidor Express escuchando en el puerto ${port}`);
+    logger.info(`Servidor Express escuchando en el puerto ${port}`);
 });
 

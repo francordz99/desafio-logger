@@ -6,5 +6,6 @@ import testingController from "../controllers/testingController.js";
 const testingRoutes = Router();
 
 testingRoutes.get('/mockingProducts', authenticateToken, checkUserRole, testingController.getMockedProducts);
+testingRoutes.get('/logsTesting', authenticateToken, checkUserRole, testingController.logsTesting);
 
 export default testingRoutes;

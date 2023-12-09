@@ -1,9 +1,11 @@
 import Product from "../dao/models/productModel.js";
 import User from "../dao/models/userModel.js";
 import { adminErrors } from "../services/errors/adminErrors.js";
+import { logger } from "../helpers/loggerConfig.js";
 
 const adminController = {
     getAdmin: async (req, res) => {
+        logger.info('Renderizando la página de administrador');
         res.render('admin');
     },
     getProduct: async (req, res) => {
@@ -15,9 +17,10 @@ const adminController = {
                 adminErrors.getProductNotFoundError();
             }
 
+            logger.info('Renderizando la página de administrador con información del producto');
             res.render('admin', { product: existingProduct });
         } catch (error) {
-            console.error(error);
+            logger.error(`Error en getProduct: ${error}`);
             adminErrors.getProductError(error);
         }
     },
@@ -35,9 +38,10 @@ const adminController = {
             });
             await newProduct.save();
             const successMessage = 'Producto agregado a la base de datos con éxito.';
+            logger.info(successMessage);
             res.render('admin', { successMessage });
         } catch (error) {
-            console.error(error);
+            logger.error(`Error en postProduct: ${error}`);
             adminErrors.addProductError(error);
         }
     },
@@ -47,6 +51,7 @@ const adminController = {
             const existingProduct = await Product.findOne({ code });
 
             if (!existingProduct) {
+                logger.error('Producto no encontrado');
                 return res.status(404).send('Producto no encontrado.');
             }
 
@@ -60,10 +65,11 @@ const adminController = {
             await existingProduct.save();
 
             const successMessage = 'Producto editado con éxito.';
+            logger.info(successMessage);
             res.render('admin', { successMessage });
 
         } catch (error) {
-            console.error(error);
+            logger.error(`Error en putProduct: ${error}`);
             adminErrors.editProductError(error);
         }
     },
@@ -73,14 +79,16 @@ const adminController = {
             const existingProduct = await Product.findOne({ code });
 
             if (!existingProduct) {
+                logger.error('Producto no encontrado');
                 return res.status(404).send('Producto no encontrado.');
             }
             await Product.deleteOne({ code });
 
             const successMessage = 'Producto eliminado con éxito.';
+            logger.info(successMessage);
             res.render('admin', { successMessage });
         } catch (error) {
-            console.error(error);
+            logger.error(`Error en deleteProduct: ${error}`);
             adminErrors.deleteProductError(error);
         }
     },
@@ -90,16 +98,18 @@ const adminController = {
             const user = await User.findOne({ email: email });
 
             if (!user) {
+                logger.error('Usuario no encontrado');
                 return res.status(404).send('Usuario no encontrado.');
             }
             user.role = permissionLevel;
             await user.save();
 
             const successMessage = 'Permisos actualizados con éxito.';
+            logger.info(successMessage);
             res.render('admin', { successMessage });
 
         } catch (error) {
-            console.error(error);
+            logger.error(`Error en editPermissions: ${error}`);
             adminErrors.editPermissionsError(error);
         }
     }
